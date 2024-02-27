@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  react: 
+    build: 
+      context: .
+      dockerfile: Dockerfile1
+    image: sunny2883/detesting-react
+    ports:
+      - "3000:3000"
+    expose:
+      - "3000"
+    restart: always
+    depends_on:
+      - mysql
+    
+
+  node:
+    build: 
+      context: .
+      dockerfile: Dockerfile2
+    image: sunny2883/detesting-node
+    ports:
+      - "3001:3001"
+      - "3002:3002"
+      - "3003:3003"
+    expose:
+      - "3001"
+      - "3002"
+      - "3003"
+    restart: always
+    depends_on:
+      - mysql
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: jainil
+      MYSQL_PASSWORD: jainil115
+      MYSQL_DATABASE: syce1a
+      MYSQL_ROOT_PASSWORD: jainil115
+
+  mysql:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_USER: jainil
+      MYSQL_PASSWORD: jainil115
+      MYSQL_DATABASE: syce1a
+      MYSQL_ROOT_PASSWORD: jainil115
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
